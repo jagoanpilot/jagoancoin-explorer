@@ -37,22 +37,22 @@
   "webserver": {
     // port: Port # to configure the express webserver to listen for http requests on
     //       NOTE: Be sure to configure firewalls to allow traffic through this port or the explorer website may not be accessible remotely
-    "port": 3001,
+    "port": 80,
     // tls: a collection of settings that pertain to the TLS (Transport Layer Security) protocol feature (aka: ssl or https)
     "tls": {
       // enabled: Enable/disable TLS
       //          If set to true, the express webserver will be configured to use an https connection
       //          If set to false, all TLS features will be completely disabled
-      "enabled": false,
+      "enabled": true,
       // port: Port # to configure the express webserver to listen for https requests on
       //       NOTE: Be sure to configure firewalls to allow traffic through this port or the explorer website may not be accessible remotely
       "port": 443,
       // cert_file: The absolute or relative path to the tls certificate file. Typically this file will be generated from certbot (read more: https://certbot.eff.org)
-      "cert_file": "/etc/letsencrypt/live/domain-name-here/cert.pem",
+      "cert_file": "/etc/letsencrypt/live/explorer.jagoancoin.org/cert.pem",
       // chain_file: The absolute or relative path to the tls chain file. Typically this file will be generated from certbot (read more: https://certbot.eff.org)
-      "chain_file": "/etc/letsencrypt/live/domain-name-here/chain.pem",
+      "chain_file": "/etc/letsencrypt/live/explorer.jagoancoin.org/chain.pem",
       // key_file: The absolute or relative path to the tls private key file. Typically this file will be generated from certbot (read more: https://certbot.eff.org)
-      "key_file": "/etc/letsencrypt/live/domain-name-here/privkey.pem"
+      "key_file": "/etc/letsencrypt/live/explorer.jagoancoin.org/privkey.pem"
     },
     // cors: a collection of settings that pertain to the cors feature
     //       Cross-Origin Resource Sharing (CORS) support (read more: https://www.maxcdn.com/one/visual-glossary/cors/)
@@ -73,9 +73,9 @@
   "coin": {
     // name: Name of the cryptocurrency coin being explored. This value is displayed in the page header when the "shared_pages.page_header.home_link" setting is set to "coin".
     //       NOTE: This value acts as a unique identifier for data stored in mongo and therefore cannot be changed without re-syncing all existing data.
-    "name": "Exor",
+    "name": "Jagoancoin",
     // symbol: The cryptocurrency coin ticker/symbol value. This value is displayed anywhere that coin data is displayed including the index, address, block, movement, reward, richlist/top100 and tx pages
-    "symbol": "EXOR"
+    "symbol": "JGC"
   },
 
   // network_history: a collection of settings that controls saving of extra historical network data during a block sync
@@ -96,24 +96,10 @@
     //        (see /public/css/themes for available themes)
     "theme": "Exor",
     // page_title: The text to display at the end of the HTML title tag and also displayed in the page header when the "shared_pages.page_header.home_link" setting is set to "title"
-    "page_title": "eIquidus",
-    // favicons: a collection of image or icon files that are displayed in a browser window/tab and serve as branding for your website. Their main purpose is to help visitors locate your page easier when they have multiple tabs open
-    //          Modern favicon sizes were inspired by this web article: https://www.emergeinteractive.com/insights/detail/The-Essentials-of-FavIcons/
-    //          NOTE: If any of the favicons are left blank or not set to a valid file, they will be disabled and unused
-    "favicons": {
-      // favicon32: The path to a 32x32 image or icon file
-      //            NOTE: The path root is /public
-      "favicon32": "favicon-32.png",
-      // favicon128: The path to a 128x128 image or icon file
-      //            NOTE: The path root is /public
-      "favicon128": "favicon-128.png",
-      // favicon180: The path to a 180x180 image or icon file
-      //            NOTE: The path root is /public
-      "favicon180": "favicon-180.png",
-      // favicon192: The path to a 192x192 image or icon file
-      //            NOTE: The path root is /public
-      "favicon192": "favicon-192.png"
-    },
+    "page_title": "JGC",
+    // favicon: The path to an icon file that is displayed in a browser window/tab and serves as branding for your website. Its main purpose is to help visitors locate your page easier when they have multiple tabs open
+    //          NOTE: The path root is /
+    "favicon": "public/favicon.ico",
     // logo: The path to an image file that is displayed on the api page as well as in one of the top panels when enabled
     //       This logo can also be displayed in the header when the "shared_pages.page_header.home_link" setting is set to "logo" and the "shared_pages.page_header.home_link_logo" setting is blank or an invalid file
     //       NOTE: The path root is /public
@@ -147,7 +133,7 @@
     //             POW: Display the proof-of-work difficulty value
     //             POS: Display the proof-of-stake difficulty value
     //             Hybrid: Display both the proof-of-work and proof-of-stake difficulty values
-    "difficulty": "POS",
+    "difficulty": "POW",
     // show_hashrate: Determine whether to show network hash rate where applicable (true/false)
     //                If set to false, the /api/getnetworkhashps and /ext/getsummary apis will no longer show hash rate information, and the network hashrate chart will automatically be disabled
     "show_hashrate": true,
@@ -166,7 +152,7 @@
       // home_link_logo: The path to a logo image that is displayed on page header when the "shared_pages.page_header.home_link" setting is set to "logo"
       //                 If the home_link_logo is left blank or not set to a valid file, the "shared_pages.page_header.home_link" = "logo" setting will automatically default to displaying the original "shared_pages.logo" instead of the "shared_pages.page_header.home_link_logo"
       //                 NOTE: The path root is /public
-      "home_link_logo": "/img/header-logo.png",
+      "home_link_logo": "/img/header_logo.png",
       // home_link_logo_height: The max-height value of the "shared_pages.page_header.home_link" logo image (value in px, only valid if "shared_pages.page_header.home_link" = 'logo')
       "home_link_logo_height": 50,
       // panels: a collection of settings that pertain to the panels displayed on page header of all pages (NOTE: you can show/hide the entire group of panels on each page independently by changing the show_panels value in the settings for each page)
@@ -176,11 +162,11 @@
         "network_panel": {
           // enabled: Enable/disable the network panel (true/false)
           //          If set to false, the network panel will be completely inaccessible
-          "enabled": false,
+          "enabled": true,
           // display_order: Determine which order this panel is shown from 1-5
           //                1 = far left panel, 5 = far right panel
           //                The panel will be disabled with a value of 0
-          "display_order": 0,
+          "display_order": 4,
           // nethash: Determine how to acquire network hashrate. Valid options:
           //          getnetworkhashps: retrieved from getnetworkhashps rpc cmd
           //          netmhashps: retrieved from getmininginfo rpc cmd
@@ -192,17 +178,17 @@
           //                M: Display value in megahashes (MH/s)
           //                K: Display value in kilohashes (KH/s)
           //                H: Display value in hashes (H/s)
-          "nethash_units": "G"
+          "nethash_units": "M"
         },
         // difficulty_panel: a collection of settings that pertain to the difficulty panel which displays the current proof-of-work difficulty (only applicable to POW coins)
         "difficulty_panel": {
           // enabled: Enable/disable the difficulty panel (true/false)
           //          If set to false, the difficulty panel will be completely inaccessible
-          "enabled": false,
+          "enabled": true,
           // display_order: Determine which order this panel is shown from 1-5
           //                1 = far left panel, 5 = far right panel
           //                The panel will be disabled with a value of 0
-          "display_order": 0
+          "display_order": 5
         },
         // masternodes_panel: a collection of settings that pertain to the masternode panel which displays a count of online and unreachable masternodes (only applicable to masternode coins)
         "masternodes_panel": {
@@ -228,21 +214,21 @@
         "price_panel": {
           // enabled: Enable/disable the price panel (true/false)
           //          If set to false, the price panel will be completely inaccessible
-          "enabled": true,
+          "enabled": false,
           // display_order: Determine which order this panel is shown from 1-5
           //                1 = far left panel, 5 = far right panel
           //                The panel will be disabled with a value of 0
-          "display_order": 4
+          "display_order": 0
         },
         // market_cap_panel: a collection of settings that pertain to the market cap panel which displays the current market cap value measured against the default market pair
         "market_cap_panel": {
           // enabled: Enable/disable the market cap panel (true/false)
           //          If set to false, the market cap panel will be completely inaccessible
-          "enabled": true,
+          "enabled": false,
           // display_order: Determine which order this panel is shown from 1-5
           //                1 = far left panel, 5 = far right panel
           //                The panel will be disabled with a value of 0
-          "display_order": 5
+          "display_order": 0
         },
         // logo_panel: a collection of settings that pertain to the logo panel which displays the "shared_pages.logo" image
         "logo_panel": {
@@ -287,7 +273,7 @@
           // bgcolor: Change the background color of the network hashrate chart
           //          Set this to any valid html color
           //          Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "bgcolor": "#ffffff",
+          "bgcolor": "rgb(137, 193, 128)",
           // line_color: Change the line color of the network hashrate chart
           //             Set this to any valid html color
           //             Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
@@ -309,23 +295,15 @@
           // bgcolor: Change the background color of the network difficulty chart
           //          Set this to any valid html color
           //          Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "bgcolor": "#ffffff",
-          // pow_line_color: Change the line color of the network difficulty chart for POW coins
-          //                 Set this to any valid html color
-          //                 Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "pow_line_color": "rgba(255, 99, 132, 1)",
-          // pow_fill_color: Change the fill color of the network difficulty chart for POW coins
-          //                 Set this to any valid html color
-          //                 Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "pow_fill_color": "rgba(255, 99, 132, 0.2)",
-          // pos_line_color: Change the line color of the network difficulty chart for POS coins
-          //                 Set this to any valid html color
-          //                 Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "pos_line_color": "rgba(255, 161, 0, 1)",
-          // pos_fill_color: Change the fill color of the network difficulty chart for POS coins
-          //                 Set this to any valid html color
-          //                 Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
-          "pos_fill_color": "rgba(255, 161, 0, 0.2)",
+          "bgcolor": "rgb(137, 193, 128)",
+          // line_color: Change the line color of the network difficulty chart
+          //             Set this to any valid html color
+          //             Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
+          "line_color": "rgba(255, 99, 132, 1)",
+          // fill_color: Change the fill color of the network difficulty chart
+          //             Set this to any valid html color
+          //             Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
+          "fill_color": "rgba(255, 99, 132, 0.2)",
           // crosshair_color: Change the vertical crosshair line color of the network difficulty chart
           //             Set this to any valid html color
           //             Ex: "#ffffff" or "rgba(255, 255, 255, 1)" or "white"
@@ -365,7 +343,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Github
           "tooltip_text": "Github",
           // url: The exact url that the social link should navigate to
-          "url": "https://github.com/team-exor",
+          "url": "https://github.com/jagoanpilot/jagoancoin",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "fab fa-github",
           // image_path: The path to an image file that will be displayed for this social link
@@ -379,7 +357,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Twitter
           "tooltip_text": "Twitter",
           // url: The exact url that the social link should navigate to
-          "url": "https://twitter.com/ExorOfficial",
+          "url": "https://twitter.com/jagoancoin",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "fab fa-twitter",
           // image_path: The path to an image file that will be displayed for this social link
@@ -393,7 +371,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Discord
           "tooltip_text": "Discord",
           // url: The exact url that the social link should navigate to
-          "url": "https://discord.gg/dSuGm3y",
+          "url": "https://discord.gg/XGEp2cKSKF",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "fab fa-discord",
           // image_path: The path to an image file that will be displayed for this social link
@@ -407,7 +385,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Telegram
           "tooltip_text": "Telegram",
           // url: The exact url that the social link should navigate to
-          "url": "https://t.me/Exorofficial",
+          "url": "https://t.me/jagoancoin",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "fab fa-telegram",
           // image_path: The path to an image file that will be displayed for this social link
@@ -421,7 +399,7 @@
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Website
           "tooltip_text": "Website",
           // url: The exact url that the social link should navigate to
-          "url": "https://exor.io",
+          "url": "https://jagoancoin.org/",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "",
           // image_path: The path to an image file that will be displayed for this social link
@@ -431,11 +409,11 @@
         {
           // enabled: Enable/disable this particular social link (true/false)
           //          If set to false, the link will be completely inaccessible
-          "enabled": true,
+          "enabled": false,
           // tooltip_text: Social link tooltips are always prefixed by the "coin.name" setting followed by the text from this tooltip_text setting. Ex: Exor Coingecko
           "tooltip_text": "Coingecko",
           // url: The exact url that the social link should navigate to
-          "url": "https://www.coingecko.com/en/coins/exor",
+          "url": "https://www.coingecko.com/",
           // fontawesome_class: A string of css classes, separated by spaces that can be used to display a fontawesome icon for this social link. See https://fontawesome.com/ for more info
           "fontawesome_class": "",
           // image_path: The path to an image file that will be displayed for this social link
@@ -512,7 +490,7 @@
     // genesis_block: Your coins genesis block hash is used to determine the beginning of the blockchain
     //                For many bitcoin clones you can use the following cmd to get the block hash of the genesis block: coin-cli getblockhash 0
     //                NOTE: If this value is not entered correctly it will not be possible for the explorer to find or navigate to the genesis block, neither via block or transaction hash
-    "genesis_block": "00014f36c648cdbc750f7dd28487a23cd9e0b0f95f5fccc5b5d01367e3f57469"
+    "genesis_block": "eff0bbe5c1bbe1ef8da54822a18f528d6dc58232990bdb86e0a77ab2814ed12c"
   },
 
   // transaction_page: a collection of settings that pertain to the transaction/tx page
@@ -535,7 +513,7 @@
     // genesis_tx: Your coins genesis transaction hash is used to determine the beginning of the blockchain
     //             For many bitcoin clones you can use the following cmd to find the list of transaction hashes from the genesis block: coin-cli getblock 00014f36c648cdbc750f7dd28487a23cd9e0b0f95f5fccc5b5d01367e3f57469
     //             NOTE: If this value is not entered correctly it will not be possible for the explorer to find or navigate to the genesis block by searching for the genesis transaction hash
-    "genesis_tx": "dd1d332ad2d8d8f49195056d482ae3c96fd2d16e9d166413b27ca7f19775644c",
+    "genesis_tx": "bfe15871764bf35d6391308fc2dab8846f177ba563d256b1764271987ec99bc0",
     // show_op_return: Determine whether to decode and show OP_RETURN values that may have been embeddeded in a transaction
     //                 NOTE: Enabling this option will require a full reindex of the blockchain data before previously synced transactions can display the OP_RETURN value
     "show_op_return": false
@@ -628,7 +606,7 @@
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100, 250, 500, 1000 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
-      "items_per_page": 10
+      "items_per_page": 100
     }
   },
 
@@ -702,14 +680,7 @@
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
-      "items_per_page": 10,
-      // port_filter: Specify a port number to only allow showing peers on the selected port.
-      //              Set this value to 0 to show all peers on any port.
-      "port_filter": 0,
-      // hide_protocols: An array of protocol numbers that will be filtered out of the table results
-      //                 If a peer connects to the explorer wallet with one of these protocol numbers, that record will not be displayed in this table
-      //                 Add as many protocol values as necessary in the following format: [ 0, 70803, 70819 ]
-      "hide_protocols": [ ]
+      "items_per_page": 10
     },
     // addnodes_table: a collection of settings that pertain to the add nodes table on the network page
     //                 Table data is populated via the /ext/getnetworkpeers api
@@ -717,14 +688,7 @@
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
-      "items_per_page": 10,
-      // port_filter: Specify a port number to only allow showing peers on the selected port.
-      //              Set this value to 0 to show all peers on any port.
-      "port_filter": 0,
-      // hide_protocols: An array of protocol numbers that will be filtered out of the table results
-      //                 If a peer connects to the explorer wallet with one of these protocol numbers, that record will not be displayed in this table
-      //                 Add as many protocol values as necessary in the following format: [ 0, 70803, 70819 ]
-      "hide_protocols": [ ]
+      "items_per_page": 10
     },
     // onetry_table: a collection of settings that pertain to the one try table on the network page
     //               Table data is populated via the /ext/getnetworkpeers api
@@ -732,14 +696,7 @@
       // page_length_options: An array of page length options that determine how many items/records to display in the table at any given time
       "page_length_options": [ 10, 25, 50, 75, 100 ],
       // items_per_page: The default amount of items/records to display in the table at any given time
-      "items_per_page": 10,
-      // port_filter: Specify a port number to only allow showing peers on the selected port.
-      //              Set this value to 0 to show all peers on any port.
-      "port_filter": 0,
-      // hide_protocols: An array of protocol numbers that will be filtered out of the table results
-      //                 If a peer connects to the explorer wallet with one of these protocol numbers, that record will not be displayed in this table
-      //                 Add as many protocol values as necessary in the following format: [ 0, 70803, 70819 ]
-      "hide_protocols": [ ]
+      "items_per_page": 10
     }
   },
 
@@ -834,7 +791,7 @@
     "show_market_select": true,
     // exchanges: Enable/disable api integration with any of the available built-in exchanges
     //            Enabled exchanges display a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history
-    //            Supported exchanges: altmarkets, bittrex, bleutrade, crex, dex-trade, freiexchange/freixlite, poloniex, southxchange, stex, txbit, unnamed, yobit
+    //            Supported exchanges: altmarkets, bittrex, bleutrade, crex, poloniex, southxchange, stex, yobit
     "exchanges": {
       // altmarkets: a collection of settings that pertain to the altmarkets exchange
       "altmarkets": {
@@ -880,29 +837,6 @@
         //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
         "trading_pairs": [ "LTC/BTC" ]
       },
-      // dextrade: a collection of settings that pertain to the dex-trade exchange
-      "dextrade": {
-        // enabled: Enable/disable the dex-trade exchange (true/false)
-        //          If set to false, the dex-trade page will be completely inaccessible and no market data will be downloaded for this exchange
-        "enabled": false,
-        // trading_pairs: An array of market trading pair symbols
-        //                You can add as many trading pairs as necessary
-        //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
-        //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
-        "trading_pairs": [ "LTC/BTC" ]
-      },
-      // freiexchange: a collection of settings that pertain to the freiexchange/freixlite exchange
-      //               NOTE: freiexchange does not display a 24-hour chart due to a lack of OHLCV api data
-      "freiexchange": {
-        // enabled: Enable/disable the freiexchange/freixlite exchange (true/false)
-        //          If set to false, the freiexchange/freixlite page will be completely inaccessible and no market data will be downloaded for this exchange
-        "enabled": false,
-        // trading_pairs: An array of market trading pair symbols
-        //                You can add as many trading pairs as necessary
-        //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
-        //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
-        "trading_pairs": [ "LTC/BTC" ]
-      },
       // poloniex: a collection of settings that pertain to the poloniex exchange
       "poloniex": {
         // enabled: Enable/disable the poloniex exchange (true/false)
@@ -936,31 +870,8 @@
         //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
         "trading_pairs": [ "LTC/BTC", "LTC/USDT" ]
       },
-      // txbit: a collection of settings that pertain to the txbit exchange
-      //        NOTE: txbit does not display a 24-hour chart due to a lack of OHLCV api data
-      "txbit": {
-        // enabled: Enable/disable the txbit exchange (true/false)
-        //          If set to false, the txbit page will be completely inaccessible and no market data will be downloaded for this exchange
-        "enabled": false,
-        // trading_pairs: An array of market trading pair symbols
-        //                You can add as many trading pairs as necessary
-        //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
-        //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
-        "trading_pairs": [ "LTC/ETH" ]
-      },
-      // unnamed: a collection of settings that pertain to the unnamed exchange
-      "unnamed": {
-        // enabled: Enable/disable the unnamed exchange (true/false)
-        //          If set to false, the unnamed page will be completely inaccessible and no market data will be downloaded for this exchange
-        "enabled": false,
-        // trading_pairs: An array of market trading pair symbols
-        //                You can add as many trading pairs as necessary
-        //                All entries must specify your coins symbol as it is displayed on the exchange, followed by a slash (/) and ending with the symbol of the market or asset that is being traded against
-        //                Ex: "LTC/BTC", "LTC/USDT", "LTC/ETH"
-        "trading_pairs": [ "LTC/BTC" ]
-      },
       // yobit: a collection of settings that pertain to the yobit exchange
-      //        NOTE: yobit does not display a 24-hour chart due to a lack of OHLCV api data
+      //        NOTE: yobit does not display a 24-hour chart due to yobit's lack of OHLCV api data
       "yobit": {
         // enabled: Enable/disable the yobit exchange (true/false)
         //          If set to false, the yobit page will be completely inaccessible and no market data will be downloaded for this exchange
@@ -1011,18 +922,18 @@
     "sample_data": {
       // blockindex: This value can be any valid block height number from your coins blockchain
       //             NOTE: This value is only used to build example api links on the api page from the /api/getblockhash api for example
-      "blockindex": 64152,
+      "blockindex": 42069,
       // blockhash: This value can be any valid block hash from your coins blockchain
       //            For many bitcoin clones you can use the following cmd to get the block hash for a given block height: coin-cli getblockhash 64152
       //            NOTE: This value is only used to build example api links on the api page from the /api/getblock api for example
-      "blockhash": "775d67da29dd6553268061f86368d06654944dd5d5c61db4c97e4c7960c11a74",
+      "blockhash": "729ee24deac4d1df060191debdf52079a70987dc2001e058002641a1412d3782",
       // txhash: This value can be any valid transaction hash from your coins blockchain
       //         For many bitcoin clones you can use the following cmd to find a list of tx hashes for a given block hash: coin-cli getblock 000000001ba119a0f6d49ebabd83343b125d7ee3d3184b1b41d6a7f2051153eb
       //         NOTE: This value is only used to build example api links on the api page from the /api/getrawtransaction api for example
-      "txhash": "6cb3babd256de253f926f10bc8574dadf0a3e2fc8380107b81eb07c67d1e73ed",
+      "txhash": "4926858dd25098ae2a9fd98604357fa764d8f00c834edfcd88995f4dd51bef09",
       // address: This value can be any valid wallet address from your coins blockchain that has received at least 1 or more coin transactions
       //          NOTE: This value is only used to build example api links on the api page from the /ext/getaddress api for example
-      "address": "ELvb8AZRgHmdsDnD1HYFwbSY4UkPhoECCW"
+      "address": "yaDfcdCupB1T5YoVRjYr8fXCvB8U5AuNX8"
     },
     // public_apis: a collection of settings that pertain to the public api command system
     //              NOTE: Disabling any of these apis will remove the api definition from the api page and will return a "This method is disabled" msg if the api endpoint is called.
@@ -1092,7 +1003,7 @@
         "getvotelist": {
           // enabled: Enable/disable the /api/getvotelist api endpoint (true/false)
           //          If set to false, the /api/getvotelist api will be completely disabled for public use (no definition on the api page and a disabled error msg if you try to call the endpoint directly)
-          "enabled": true
+          "enabled": false
         },
         // getmasternodecount: a collection of settings that pertain to the /api/getmasternodecount api endpoint
         //                     Returns a json object containing the total number of masternodes on the network (only applicable to masternode coins)
@@ -1274,11 +1185,10 @@
     //         Valid options:
     //         COINBASE : retrieve the total coins sent from the coinbase (Often used for PoW coins)
     //         GETINFO : retrieved from getinfo rpc cmd (Often used for PoS coins)
-    //         GETBLOCKCHAININFO : retrieved from getblockchaininfo rpc cmd
     //         HEAVY: retrieved from getsupply rpc cmd (The "blockchain_specific.heavycoin.enabled" setting must be set to true and the "blockchain_specific.heavycoin.api_cmds.getsupply" setting must be set up correctly for this option to work properly)
     //         BALANCES : get the supply by running a query on the addresses collection and summing up all positive balances (potentially a long running query for blockchains with tons of addresses)
     //         TXOUTSET : retrieved from gettxoutsetinfo rpc cmd
-    "supply": "GETINFO"
+    "supply": "TXOUTSET"
   },
 
   // labels: a collection of settings that pertain to the list of customized wallet address labels
@@ -1345,8 +1255,6 @@
     "getrawtransaction": "getrawtransaction",
     // getinfo: Returns an object containing various state info
     "getinfo": "getinfo",
-    // getblockchaininfo: Returns an object containing various state info regarding blockchain processing
-    "getblockchaininfo": "getblockchaininfo",
     // getpeerinfo: Returns data about each connected network node as a json array of objects
     "getpeerinfo": "getpeerinfo",
     // gettxoutsetinfo: Returns an object with statistics about the unspent transaction output set
@@ -1354,9 +1262,9 @@
     // getvotelist: Returns an object with details regarding the current vote list
     "getvotelist": "masternodelist votes",
     // getmasternodecount: Returns a json object containing the total number of masternodes on the network
-    "getmasternodecount": "getmasternodecount",
+    "getmasternodecount": "smartnode count",
     // getmasternodelist: Returns a json array containing status information for all masternodes on the network
-    "getmasternodelist": "listmasternodes",
+    "getmasternodelist": "smartnodelist",
     // verifymessage: Verify a signed message. Must accept the following arguments:
     //                address: The wallet address to use for the signature
     //                signature: The signature provided by the signer in base 64 encoding

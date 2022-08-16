@@ -1,18 +1,22 @@
 # eIquidus
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/team-exor/eiquidus?color=ffbd11&label=version)
-![GitHub Release Date](https://img.shields.io/github/release-date/team-exor/eiquidus)
-![GitHub last commit](https://img.shields.io/github/last-commit/team-exor/eiquidus)
-<img src="public/img/screenshots/platform-windows macos linux-lightgrey.svg" />
-![GitHub](https://img.shields.io/github/license/team-exor/eiquidus?color=ffbd11)
+### v1.99.0
 
 Written in node.js and mongodb, eIquidus is the most stable, secure, customizable and feature-rich open-source block explorer with support for virtually any altcoin that implements some form of the [Bitcoin RPC API protocol](https://developer.bitcoin.org/reference/rpc/index.html). Originally built for the [Exor blockchain](https://github.com/team-exor/exor), eIquidus has since grown into a fully-featured explorer with a focus on stability and security at its core. All features from the [original iquidus explorer](https://github.com/iquidus/explorer) are included here along with many new ideas from other iquidus forks, and an absolute ton of new custom changes and bug fixes that were developed specifically for eIquidus.
 
-![Homepage](public/img/screenshots/homepage-1-101-0.png)
+![Homepage](public/img/screenshots/homepage.png)
 
-### Premium Support
+#### Special Thanks
+- **[Luke Williams (aka iquidus)](https://github.com/iquidus):** for creating the original [Iquidus explorer](https://github.com/iquidus/explorer)
+- **[Alan Rudolf (aka suprnurd)](https://github.com/suprnurd):** for the custom changes found in the [Ciquidus explorer](https://github.com/suprnurd/ciquidus)
+- **[Tim Garrity (aka uaktags)](https://github.com/uaktags):** for his many contributions to the Iquidus explorer and custom features from the [uaktags explorer](https://github.com/uaktags/explorer)
+- **[TheHolyRoger](https://github.com/TheHolyRoger):** for his continued work and contributions to the Iquidus explorer
+- All the rest of the Iquidus contributors who helped shape the Iquidus explorer in some way
 
-All code in this project is open source and available free-of-charge under the BSD-3-Clause license. If you require assistance setting up an explorer for your coin, or are interested in hiring a developer to incorporate custom changes for your explorer, you may contact the developer using the links below:
+<h3 class="rich-diff-level-zero" align="center" name="eiquidus-open-bounty-program">:moneybag: eIquidus Open Bounty Program :moneybag:</h3>
+<h3 class="rich-diff-level-zero" align="center">:moneybag: DEVELOPERS WANTED: We pay EXOR coins for quality pull requests :moneybag:</h3>
+
+Before getting too excited, please note that for now, the average payment will likely be equivalent to the price of a cup of coffee, depending on the complexity and usefulness of the pull request. The open bounty means that we welcome any and all code submissions that improve the overall experience of the explorer in some way. We are generally more interested in bug fixes and feature enhancements that are useful for most users, and are less interested in coin-specific changes that only benefit a small handful of users, although we do appreciate and support those types of updates as well. Payments will be decided on a case by case basis. If you are interested in submitting a pull request for payment, you may [create a new issue](https://github.com/team-exor/eiquidus/issues) for bugs, [start a new discussion](https://github.com/team-exor/eiquidus/discussions) for general updates, or contact the developer privately via Discord or Telegram using the links below to get an approximate quote on how much a particular fix or feature may be worth.
 
 <div align="center">
 <a href="https://discord.gg/dSuGm3y"><img src="https://img.shields.io/badge/Discord-Joe%20%5BTeam%20Exor%5D%235573-blue?style=for-the-badge&logo=Discord" /></a>&nbsp;
@@ -38,10 +42,8 @@ Table of Contents
   - [Start Explorer Using PM2 (Recommended for Production)](#start-explorer-using-pm2-recommended-for-production)
   - [Start Explorer Using PM2 and Log Viewer](#start-explorer-using-pm2-and-log-viewer)
   - [Stop Explorer Using PM2 (Recommended for Production)](#stop-explorer-using-pm2-recommended-for-production)
-  - [Reload Explorer Using PM2 (Recommended for Production)](#reload-explorer-using-pm2-recommended-for-production)
   - [Start Explorer Using Forever (Alternate Production Option)](#start-explorer-using-forever-alternate-production-option)
   - [Stop Explorer Using Forever (Alternate Production Option)](#stop-explorer-using-forever-alternate-production-option)
-  - [Reload Explorer Using Forever (Alternate Production Option)](#reload-explorer-using-forever-alternate-production-option)
 - [Syncing Databases with the Blockchain](#syncing-databases-with-the-blockchain)
   - [Commands for Manually Syncing Databases](#commands-for-manually-syncing-databases)
   - [Sample Crontab](#sample-crontab)
@@ -62,8 +64,7 @@ Table of Contents
   - [Restore Database Script](#restore-database-script)
   - [Delete Database Script](#delete-database-script)
 - [Known Issues](#known-issues)
-- [Donations / Support Us](#donations--support-us)
-- [Special Thanks](#special-thanks)
+- [How You Can Support Us](#how-you-can-support-us)
 - [License](#license)
 
 ### Features
@@ -89,19 +90,15 @@ Table of Contents
   - **Movement:** Displays latest blockchain transactions that are greater than a certain configurable amount
   - **Network:** Displays a list of peers that have connected to the coind wallet in the past 24 hours, along with useful addnode data that can be used to connect your own wallets to the network easier
   - **Top 100:** Displays the top 100 richest wallet addresses, the top 100 wallet addresses that have the highest total number of coins received based on adding up all received transactions, as well as a table and pie chart breakdown of wealth distribution. Additional support for omitting burned coins from top 100 lists
-  - **Markets:** Displays a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history. The last known default exchange price is automatically converted to USD using the coingecko api from [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api). The following 12 cryptocurrency exchanges are supported:
+  - **Markets:** Displays a number of exchange-related metrics including market summary, 24 hour chart, most recent buy/sell orders and latest trade history. The last known default exchange price is automatically converted to USD using the coingecko api from [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api). The following 8 cryptocurrency exchanges are supported:
     - [AltMarkets](https://altmarkets.io)
     - [Bittrex](https://bittrex.com)
     - [Bleutrade](https://bleutrade.com)
     - [Crex24](https://crex24.com)
-    - [Dex-Trade](https://dex-trade.com)
-    - [FreiExchange](https://freiexchange.com)/[FreiXLite](https://freixlite.com) *\*no chart support due to a lack of OHLCV api data*
     - [Poloniex](https://poloniex.com)
     - [SouthXchange](https://southxchange.com)
     - [Stex](https://stex.com)
-    - [Txbit](https://txbit.io) *\*no chart support due to a lack of OHLCV api data*
-    - [Unnamed](https://unnamed.exchange)
-    - [Yobit](https://yobit.io) *\*no chart support due to a lack of OHLCV api data*
+    - [Yobit](https://yobit.io) *\*no chart support due to yobit's lack of OHLCV api data*
   - **API:** A listing of available public API's that can be used to retrieve information from the network without the need for a local wallet. The following public API's are supported:
     - **RPC API calls** (Return data from coind)
       - **getdifficulty:** Returns the current difficulty
@@ -181,7 +178,6 @@ Table of Contents
   - **getblock:** Returns an object with information about the block
   - **getrawtransaction:** Returns raw transaction data
   - **getinfo:** Returns an object containing various state info
-  - **getblockchaininfo:** Returns an object containing various state info regarding blockchain processing
   - **getpeerinfo:** Returns data about each connected network node as a json array of objects
   - **gettxoutsetinfo:** Returns an object with statistics about the unspent transaction output set
   - **getvotelist:** Returns an object with details regarding the current vote list
@@ -228,10 +224,9 @@ Table of Contents
 
 While we do not yet have our own step-by-step setup instructions, there are a few well-written guides out there already that detail how to set up and install the [original iquidus explorer](https://github.com/iquidus/explorer). Because the setup process for iquidus is more-or-less identical to eIquidus at this moment in time (making changes to settings.json is probably the biggest difference although we have helpful comments for each setting), here are some of the more complete guides that may be useful for anyone who needs more detailed instructions than are provided in the [Quick Install Instructions](#quick-install-instructions):
 
-1. [Beginners Guide for Iquidus Explorer Setup](https://gist.github.com/samqju/b9fc6c007f083e6429387051e24da1c3)
+1. [Iquidus Block Explorer Setup Guide](https://medium.com/stakeandnodes/iquidus-block-explorer-setup-guide-stake-and-nodes-4d183a8d07dc)
 2. [Node and Iquidus Explorer Setup for Dummies](https://gist.github.com/scottie/b6179c34ce3cf200fcc5d08727a46623)
 3. [Iquidus Block Explorer Guide](https://www.reddit.com/r/BiblePay/comments/7elm7r/iquidus_block_explorer_guide)
-4. [The Ultimate Iquidus Explorer Installation Guide - WAYBACKMACHINE](https://web.archive.org/web/20210228210054/https://stakeandnodes.net/iquidus-explorer-installation-guide/)
 
 #### Quick Install Instructions
 
@@ -241,8 +236,7 @@ The following prerequisites must be installed before using the explorer:
 
 - [Node.js](https://nodejs.org/en/) (v14.15.4 or newer recommended)
 - [MongoDB](https://www.mongodb.com/) (v4.4.3 or newer recommended)
-- [Git](https://git-scm.com/downloads) (v2.36.0 or newer recommended)
-- A fully synchronized *coind* wallet daemon that supports the [Bitcoin RPC API protocol](https://developer.bitcoin.org/reference/rpc/index.html). **NOTE:** In most cases, the blockchain must be synced with the `txindex` feature enabled to have access to all transactions. See the [Wallet Settings](#wallet-settings) section for more details.
+- A fully synchronized *coind* wallet daemon that supports the [Bitcoin RPC API protocol](https://developer.bitcoin.org/reference/rpc/index.html)
 
 ##### Database Setup
 
@@ -275,7 +269,7 @@ git clone https://github.com/team-exor/eiquidus explorer
 ##### Install Node Modules
 
 ```
-cd explorer && npm install --only=prod
+cd explorer && npm install --production
 ```
 
 ##### Configure Explorer Settings
@@ -285,8 +279,6 @@ cp ./settings.json.template ./settings.json
 ```
 
 *Make required changes in settings.json*
-
-**NOTE:** You can further customize the site by adding your own javascript code to the `public/js/custom.js` file and css rules to the `public/css/custom.scss` file. Adding changes to `custom.js` and `custom.scss` is the preferred method of customizing your site, without affecting the ability to receive explorer code updates in the future.
 
 ### Start/Stop the Explorer
 
@@ -315,7 +307,7 @@ npm run start-instance
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/npm run prestart && /path/to/node --stack-size=10000 ./bin/cluster 1
+cd /path/to/explorer && /path/to/npm run prestart && /path/to/node --stack-size=10000 ./bin/instance
 ```
 
 #### Stop Explorer (Use for Testing)
@@ -345,7 +337,7 @@ npm run start-pm2
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/npm run prestart "pm2" && /path/to/pm2 start ./bin/instance -i 0 -n explorer -p "./tmp/pm2.pid" --node-args="--stack-size=10000"
+cd /path/to/explorer && /path/to/npm run prestart "pm2" && /path/to/pm2 start ./bin/instance -i 0 --node-args="--stack-size=10000"
 ```
 
 **NOTE:** Use the following cmd to find the install path for PM2 (Linux only):
@@ -365,7 +357,7 @@ npm run start-pm2-debug
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/npm run prestart "pm2" && /path/to/pm2 start ./bin/instance -i 0 -n explorer -p "./tmp/pm2.pid" --node-args="--stack-size=10000" && /path/to/pm2 logs
+cd /path/to/explorer && /path/to/npm run prestart "pm2" && /path/to/pm2 start ./bin/instance -i 0 --node-args="--stack-size=10000" && /path/to/pm2 logs
 ```
 
 #### Stop Explorer Using PM2 (Recommended for Production)
@@ -379,23 +371,7 @@ npm run stop-pm2
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/pm2 stop explorer
-```
-
-#### Reload Explorer Using PM2 (Recommended for Production)
-
-The explorer can be stopped and restarted in a single cmd when it is running via PM2, which is often necessary after updating the explorer code for example. Use one of the following terminal cmds to reload the explorer (be sure to run from within the explorer directory):
-
-**NOTE:** Assuming the explorer has access to 2 or more cpus, this reload will be done in such a way that there will be zero-downtime while the restart is being performed. If you only have a single cpu then the explorer will be inaccessible for a few seconds while the restart is being performed.
-
-```
-npm run reload-pm2
-```
-
-or (useful for crontab):
-
-```
-cd /path/to/explorer && /path/to/pm2 reload explorer
+cd /path/to/explorer && /path/to/pm2 stop ./bin/instance
 ```
 
 #### Start Explorer Using Forever (Alternate Production Option)
@@ -411,7 +387,7 @@ npm run start-forever
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/npm run prestart "forever"
+cd /path/to/explorer && /path/to/npm run prestart && /path/to/forever start ./bin/cluster
 ```
 
 **NOTE:** Use the following cmd to find the install path for forever (Linux only):
@@ -431,23 +407,7 @@ npm run stop-forever
 or (useful for crontab):
 
 ```
-cd /path/to/explorer && /path/to/forever stop "explorer"
-```
-
-#### Reload Explorer Using Forever (Alternate Production Option)
-
-The explorer can be stopped and restarted in a single cmd when it is running via forever, which is often necessary after updating the explorer code for example. Use one of the following terminal cmds to reload the explorer (be sure to run from within the explorer directory):
-
-**NOTE:** The explorer will be inaccessible for a few seconds while the restart is being performed.
-
-```
-npm run reload-forever
-```
-
-or (useful for crontab):
-
-```
-cd /path/to/explorer && /path/to/forever restart "explorer"
+cd /path/to/explorer && /path/to/forever stop ./bin/cluster
 ```
 
 ### Syncing Databases with the Blockchain
@@ -762,47 +722,13 @@ jQuery(document).ready(function($) {
 
 #### Update Explorer Script
 
-Automatically download and install the newest explorer source code, update out-of-date dependencies and reload the explorer with a single command. This update script can be safely run while the explorer is actively running to prevent needing to manually shut down to do updates, but please note that the website may be inaccessible for a few seconds or more while the explorer is being updated.
+Automatically download and install the newest explorer source code, update out-of-date dependencies and initialize new changes with a single command. In most cases this update script can be safely run while the explorer is actively running to prevent needing to shut down to do updates, but please note that it may be possible for certain updates with large changes to require a reboot to the explorer for all changes to take effect properly. If you notice the explorer having issues after updating, try shutting down and restarting the explorer before seeking support.
 
 **NOTE:** Only explorer installations that were installed via cloning the source from git can be automatically updated. Be sure to follow the [Quick Install Instructions](#quick-install-instructions) to set up the explorer for optimum use with this update script.
 
 Update the explorer with the following command:
 
-```
-npm run update-explorer
-```
-
-or (useful for crontab):
-
-```
-cd /path/to/explorer && /path/to/node ./scripts/update_explorer.js
-```
-
-**NOTE:** The update script also supports a couple optional parameters.
-
-Use the following command if you want to update the explorer code only, without checking for out-of-date dependencies:
-
-```
-npm run update-explorer "explorer-only"
-```
-
-or (useful for crontab):
-
-```
-cd /path/to/explorer && /path/to/node ./scripts/update_explorer.js "explorer-only"
-```
-
-Use the following command if you want to upgrade outdated dependencies only, without checking for explorer code updates:
-
-```
-npm run update-explorer "dependencies-only"
-```
-
-or (useful for crontab):
-
-```
-cd /path/to/explorer && /path/to/node ./scripts/update_explorer.js "dependencies-only"
-```
+`npm run update-explorer`
 
 #### Backup Database Script
 
@@ -886,29 +812,17 @@ Where [SIZE] is an integer higher than the default.
 
 *note: SIZE will depend on which blockchain you are using, you may need to play around a bit to find an optimal setting*
 
-
-**Error: bind EACCES ...**
-
-This error can appear when you try to run the explorer on a port number lower than 1024. There are a couple solutions to this problem which are explained in more detail in the [Run Express Webserver on Port 80](#run-express-webserver-on-port-80) section.
-
-### Donations / Support Us
+### How You Can Support Us
 
 The eIquidus block explorer is brought to you by the tireless efforts of the [Exor development team](https://exor.io/#section-team) for the benefit of the greater crypto community. If you enjoy our work, please consider supporting our continued development of this and many other cool crypto projects which you can find on our [github page](https://github.com/team-exor).
 
-Please consider supporting us with a small donation by sending us some cryptocurrency:
+You can support us via one of the following options:
 
-- **BTC:** [15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP](https://www.blockchain.com/btc/address/15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP)
-- **EXOR:** [EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd](https://explorer.exor.io/address/EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd)
-
-We also encourage submitting quality pull requests from software developers looking to help make the block explorer even better.
-
-### Special Thanks
-
-- **[Luke Williams (aka iquidus)](https://github.com/iquidus):** for creating the original [Iquidus explorer](https://github.com/iquidus/explorer)
-- **[Alan Rudolf (aka suprnurd)](https://github.com/suprnurd):** for the custom changes found in the [Ciquidus explorer](https://github.com/suprnurd/ciquidus)
-- **[Tim Garrity (aka uaktags)](https://github.com/uaktags):** for his many contributions to the Iquidus explorer and custom features from the [uaktags explorer](https://github.com/uaktags/explorer)
-- **[TheHolyRoger](https://github.com/TheHolyRoger):** for his continued work and contributions to the Iquidus explorer
-- All the rest of the Iquidus contributors who helped shape the Iquidus explorer in some way
+1. [Buy and hodl EXOR](https://app.stex.com/en/trade/pair/BTC/EXOR/1D). Buying and trading our EXOR coin helps stimulate the market price which allows us to hire more developers and continue to release high quality products in the future.
+2. Consider a small donation by sending us some cryptocurrency:
+    - **BTC:** [15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP](https://www.blockchain.com/btc/address/15zQAQFB9KR35nPWEJEKvmytUF6fg2zvdP)
+    - **EXOR:** [EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd](https://explorer.exor.io/address/EYYW8Nvz5aJz33M3JNHXG2FEHWUsntozrd)
+3. Are you a software developer? Consider taking advantage of our [open bounty program](#eiquidus-open-bounty-program) and get paid in EXOR to help make the block explorer even better by submitting code improvements.
 
 ### License
 

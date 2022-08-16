@@ -30,7 +30,7 @@
   "tx_block_hash": "Block Hash",
   "tx_recipients": "Recipients",
   "tx_contributors": "Input Addresses",
-  "tx_hash": "Tx Hash",
+  "tx_hash": "Hash",
   "tx_address": "Address",
   "tx_nonstandard": "NONSTANDARD TX",
   "view_raw_tx_data": "View Raw Transaction Data",
@@ -85,8 +85,8 @@
   "a_qr": "QR Code",
 
   // masternode view
-  "mn_title": "{1} Masternodes",
-  "mn_description": "A listing of all masternodes known to be active on the {1} network",
+  "mn_title": "{1} Smartnodes",
+  "mn_description": "A listing of all smartnodes known to be active on the {1} network",
   "mn_masternode_list": "Masternode List",
 
   // movement view

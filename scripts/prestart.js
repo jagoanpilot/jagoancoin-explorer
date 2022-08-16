@@ -33,8 +33,6 @@ if (!(nodeVersionMajor > minNodeVersionMajor || (nodeVersionMajor == minNodeVers
 }
 
 function check_argument_passed(cb) {
-  const pidName = (process.argv[2] != null && process.argv[2] != '' && (process.argv[2] == 'pm2' || process.argv[2] == 'forever') ? process.argv[2] : 'node');
-
   // check 1st argument
   if (process.argv[2] != null) {
     const { exec } = require('child_process');
@@ -56,11 +54,11 @@ function check_argument_passed(cb) {
 
             // install pm2
             exec(`npm install pm2@latest${(isWinOS ? ' -g' : '')}`, (err, stdout, stderr) => {
-              // always return the pidName for now without checking results
-              return cb(pidName);
+              // always return true for now without checking results
+              return cb(true);
             });
           } else
-            return cb(pidName);
+            return cb(true);
         });
         break;
       case 'forever':
@@ -75,38 +73,36 @@ function check_argument_passed(cb) {
             
             // install forever
             exec('npm install forever', (err, stdout, stderr) => {
-              // always return the pidName for now without checking results
-              return cb(pidName);
+              // always return true for now without checking results
+              return cb(true);
             });
           } else
-            return cb(pidName);
+            return cb(true);
         });
         break;
       default:
         // argument not passed or unknown argument
-        return cb(pidName);
+        return cb(true);
     }
   } else
-    return cb(pidName);
+    return cb(true);
 }
 
 // check if an argument was passed into this script
-check_argument_passed(function(pidName) {
-  const execSync = require('child_process').execSync;
+check_argument_passed(function(retVal) {
+  const fs = require('fs');
+  const settings = require('../lib/settings');
 
-  // compile scss to css
-  execSync('node ./scripts/compile_css.js', {stdio : 'inherit'});
+  // ensure the selected theme is properly installed
+  fs.writeFile('./public/css/_theme-selector.scss', `$theme-name: "${settings.shared_pages.theme}";`, function (err) {
+    const sass = require('sass');
 
-  // check if the webserver should be started from here based on the pidName
-  if (pidName == 'forever') {
-    const path = require('path');
+    // generate minified css from scss file
+    const minified = sass.compile('./public/css/style.scss', {style: 'compressed'});
 
-    // there is a long-time bug or shortcoming in forever that still exists in the latest version which requires the absolute path to the pid file option
-    // more info: https://github.com/foreversd/forever/issues/421
-    // forever is therefore started from here to be able to more easily resolve the absolute path
-    execSync(`forever start --append --uid "explorer" --pidFile "${path.resolve('./tmp/forever.pid')}" ./bin/cluster`, {stdio : 'inherit'});
-  }
-
-  // finished pre-loading
-  process.exit(0);
+    // save the minified css to file
+    fs.writeFile('./public/css/style.min.css', minified.css, function (err) {
+      // Finished pre-loading
+    });
+  });
 });

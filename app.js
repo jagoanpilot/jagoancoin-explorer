@@ -10,7 +10,8 @@ var express = require('express'),
     lib = require('./lib/explorer'),
     db = require('./lib/database'),
     package_metadata = require('./package.json'),
-    locale = require('./lib/locale');
+    locale = require('./lib/locale'),
+    request = require('postman-request');
 var app = express();
 var apiAccessList = [];
 const { exec } = require('child_process');
@@ -48,24 +49,7 @@ if (settings.webserver.cors.enabled == true) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-var default_favicon = '';
-
-// loop through the favicons
-Object.keys(settings.shared_pages.favicons).forEach(function(key, index, map) {
-  // remove the public directory from the path if exists
-  if (settings.shared_pages.favicons[key] != null && settings.shared_pages.favicons[key].indexOf('public/') > -1)
-    settings.shared_pages.favicons[key] = settings.shared_pages.favicons[key].replace(/public\//g, '');
-
-  // check if the favicon file exists
-  if (!db.fs.existsSync(path.join('./public', settings.shared_pages.favicons[key])))
-    settings.shared_pages.favicons[key] = '';
-  else if (default_favicon == '')
-    default_favicon = settings.shared_pages.favicons[key];
-});
-
-if (default_favicon != '')
-  app.use(favicon(path.join('./public', default_favicon)));
-
+app.use(favicon(path.join(__dirname, settings.shared_pages.favicon)));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -504,6 +488,13 @@ app.use('/ext/getsummary', function(req, res) {
 app.use('/ext/getnetworkpeers', function(req, res) {
   // check if the getnetworkpeers api is enabled or else check the headers to see if it matches an internal ajax request from the explorer itself (TODO: come up with a more secure method of whitelisting ajax calls from the explorer)
   if ((settings.api_page.enabled == true && settings.api_page.public_apis.ext.getnetworkpeers.enabled == true) || (req.headers['x-requested-with'] != null && req.headers['x-requested-with'].toLowerCase() == 'xmlhttprequest' && req.headers.referer != null && req.headers.accept.indexOf('text/javascript') > -1 && req.headers.accept.indexOf('application/json') > -1)) {
+    var internal = false;
+    // split url suffix by forward slash and remove blank entries
+    var split = req.url.split('/').filter(function(v) { return v; });
+    // check if this is an internal request
+    if (split.length > 0 && split[0].indexOf('internal') > -1)
+      internal = true;
+
     // get list of peers
     db.get_peers(function(peers) {
       // loop through peers list and remove the mongo _id and __v keys
@@ -512,21 +503,14 @@ app.use('/ext/getnetworkpeers', function(req, res) {
         delete peers[i]['_doc']['__v'];
       }
 
-      // sort ip6 addresses to the bottom
-      peers.sort(function(a, b) {
-        var address1 = a.address.indexOf(':') > -1;
-        var address2 = b.address.indexOf(':') > -1;
-
-        if (address1 < address2)
-          return -1;
-        else if (address1 > address2)
-          return 1;
-        else
-          return 0;
-      });
-
-      // return peer data
-      res.json(peers);
+      // check if this is an internal request
+      if (internal) {
+        // display data formatted for internal datatable
+        res.json({"data": peers});
+      } else {
+        // display data in more readable format for public api
+        res.json(peers);
+      }
     });
   } else
     res.end('This method is disabled');
@@ -601,20 +585,6 @@ app.use('/ext/getnetworkchartdata', function(req, res) {
   });
 });
 
-app.use('/system/restartexplorer', function(req, res, next) {
-  // check to ensure this special cmd is only executed by the local server
-  if (req._remoteAddress != null && req._remoteAddress.indexOf('127.0.0.1') > -1) {
-    // send a msg to the cluster process telling it to restart
-    process.send('restart');
-    res.end();
-  } else {
-    // show the error page
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  }
-});
-
 var market_data = [];
 var market_count = 0;
 
@@ -629,48 +599,16 @@ if (settings.markets_page.enabled == true) {
         // load market file
         var exMarket = require('./lib/markets/' + key);
         // save market_name and market_logo from market file to settings
-        eval('market_data.push({id: "' + key + '", name: "' + (exMarket.market_name == null ? '' : exMarket.market_name) + '", alt_name: "' + (exMarket.market_name_alt == null ? '' : exMarket.market_name_alt) + '", logo: "' + (exMarket.market_logo == null ? '' : exMarket.market_logo) + '", alt_logo: "' + (exMarket.market_logo_alt == null ? '' : exMarket.market_logo_alt) + '", trading_pairs: []});');
+        eval('market_data.push({id: "' + key + '", name: "' + (exMarket.market_name == null ? '' : exMarket.market_name) + '", logo: "' + (exMarket.market_logo == null ? '' : exMarket.market_logo) + '", trading_pairs: []});');
         // loop through all trading pairs for this market
         for (var i = 0; i < settings.markets_page.exchanges[key].trading_pairs.length; i++) {
-          var isAlt = false;
-          var pair = settings.markets_page.exchanges[key].trading_pairs[i].toUpperCase(); // ensure trading pair setting is always uppercase
-          var coin_symbol = pair.split('/')[0];
-          var pair_symbol = pair.split('/')[1];
-
-          // determine if using the alt name + logo
-          if (exMarket.market_url_template != null && exMarket.market_url_template != '') {
-            switch ((exMarket.market_url_case == null || exMarket.market_url_case == '' ? 'l' : exMarket.market_url_case.toLowerCase())) {
-              case 'l':
-              case 'lower':
-                isAlt = (exMarket.isAlt != null ? exMarket.isAlt({coin: coin_symbol.toLowerCase(), exchange: pair_symbol.toLowerCase()}) : false);
-                break;
-              case 'u':
-              case 'upper':
-                isAlt = (exMarket.isAlt != null ? exMarket.isAlt({coin: coin_symbol.toUpperCase(), exchange: pair_symbol.toUpperCase()}) : false);
-                break;
-              default:
-            }
-          }
-
+          // ensure trading pair setting is always uppercase
+          settings.markets_page.exchanges[key].trading_pairs[i] = settings.markets_page.exchanges[key].trading_pairs[i].toUpperCase();
           // add trading pair to market_data
-          market_data[market_data.length - 1].trading_pairs.push({
-            pair: pair,
-            isAlt: isAlt
-          });
-
+          market_data[market_data.length - 1].trading_pairs.push(settings.markets_page.exchanges[key].trading_pairs[i]);
           // increment the market count
           market_count++;
         }
-
-        // sort trading pairs by alt status
-        market_data[market_data.length - 1].trading_pairs.sort(function(a, b) {
-          if (a.isAlt < b.isAlt)
-            return -1;
-          else if (a.isAlt > b.isAlt)
-            return 1;
-          else
-            return 0;
-        });
       }
     }
   });

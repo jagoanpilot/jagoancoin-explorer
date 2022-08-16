@@ -4,15 +4,7 @@ html(lang='en')
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     meta(http-equiv='Content-Language', content='en')
-    title=(page_title_prefix == null || page_title_prefix == '' ? settings.locale.error_title.replace('{1}', settings.coin.name) : page_title_prefix) + ' - ' + settings.shared_pages.page_title
-    if settings.shared_pages.favicons.favicon32 != ''
-      link(rel='icon', href='/' + settings.shared_pages.favicons.favicon32, sizes='32x32')
-    if settings.shared_pages.favicons.favicon128 != ''
-      link(rel='icon', href='/' + settings.shared_pages.favicons.favicon128, sizes='128x128')
-    if settings.shared_pages.favicons.favicon180 != ''
-      link(rel='icon', href='/' + settings.shared_pages.favicons.favicon180, sizes='180x180')
-    if settings.shared_pages.favicons.favicon192 != ''
-      link(rel='icon', href='/' + settings.shared_pages.favicons.favicon192, sizes='192x192')
+    title=page_title_prefix + ' - ' + settings.shared_pages.page_title
     link(rel='stylesheet', href='/css/themes/' + settings.shared_pages.theme.toLowerCase() + '/bootstrap.min.css' + (themeHash == null ? '' : '?h=' + themeHash))
     link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.15.4/css/all.css')
     if active == 'markets' || active == 'richlist'
@@ -21,10 +13,8 @@ html(lang='en')
       link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/4.1.4/css/flag-icons.min.css')
     link(rel='stylesheet', type='text/css', href='https://cdn.datatables.net/v/bs5/dt-1.11.3/datatables.min.css')
     link(rel='stylesheet', href='/css/style.min.css' + (styleHash == null ? '' : '?h=' + styleHash))
-    link(rel='stylesheet', href='/css/custom.min.css' + (customHash == null ? '' : '?h=' + customHash))
     script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js', integrity='sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==', crossorigin='anonymous', referrerpolicy='no-referrer')
     script(type='text/javascript', src='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js', integrity='sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p', crossorigin='anonymous')
-    script(type='text/javascript', src='/js/custom.js')
     if active == 'markets' || active == 'richlist'
       script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jqPlot/1.0.9/jquery.jqplot.min.js')
     if active == 'markets'
@@ -435,43 +425,20 @@ html(lang='en')
               if (#{settings.network_history.enabled} == true && #{showDifficultyChart} == true && #{settings.shared_pages.page_header.network_charts.difficulty_chart.enabled} == true) {
                 const ctxDifficulty = document.getElementById('difficultyChart').getContext('2d');
 
-                var diffDataSets = [];
-                var showPOW = false;
-                var showPOS = false;
-
-                for (var i = 0; i < result.length; i++) {
-                  if (result[i].difficulty_pow != 0)
-                    showPOW = true;
-                  if (result[i].difficulty_pos != 0)
-                    showPOS = true;
-                }
-
-                if (showPOS) {
-                  diffDataSets.push({
-                    label: 'POS Difficulty',
-                    data: result.map(function(a) {return a.difficulty_pos;}),
-                    backgroundColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.pos_fill_color}'],
-                    borderColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.pos_line_color}'],
-                    fill: 'start'
-                  });
-                }
-
-                if (showPOW || !showPOS) {
-                  diffDataSets.push({
-                    label: 'POW Difficulty',
-                    data: result.map(function(a) {return a.difficulty_pow;}),
-                    backgroundColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.pow_fill_color}'],
-                    borderColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.pow_line_color}'],
-                    fill: 'start'
-                  });
-                }
-
                 if (difficultyChart == null) {
                   difficultyChart = new Chart(ctxDifficulty, {
                     type: 'line',
                     data: {
                       labels: result.map(function(a) {return a.blockindex;}),
-                      datasets: diffDataSets
+                      datasets: [
+                        {
+                          label: 'Difficulty',
+                          data: result.map(function(a) {return a.difficulty;}),
+                          backgroundColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.fill_color}'],
+                          borderColor: ['#{settings.shared_pages.page_header.network_charts.difficulty_chart.line_color}'],
+                          fill: 'start'
+                        }
+                      ]
                     },
                     options: {
                       maintainAspectRatio: false,
@@ -533,29 +500,7 @@ html(lang='en')
                   $('#difficultyChartParent').fadeIn();
                 } else {
                   difficultyChart.data.labels = result.map(function(a) {return a.blockindex;});
-
-                  if (difficultyChart.data.datasets.length != diffDataSets.length)
-                    difficultyChart.data.datasets = diffDataSets;
-                  else {
-                    if (
-                      (
-                        difficultyChart.data.datasets[0].label.indexOf('POW') > -1 &&
-                        diffDataSets[0].label.indexOf('POW') > -1
-                      )
-                      ||
-                      (
-                        difficultyChart.data.datasets[0].label.indexOf('POS') > -1 &&
-                        diffDataSets[0].label.indexOf('POS') > -1
-                      )
-                    ) {
-                      difficultyChart.data.datasets[0].data = diffDataSets[0].data;
-
-                      if (difficultyChart.data.datasets.length == 2)
-                        difficultyChart.data.datasets[1].data = diffDataSets[1].data;
-                    } else
-                      difficultyChart.data.datasets = diffDataSets;
-                  }
-
+                  difficultyChart.data.datasets[0].data = result.map(function(a) {return a.difficulty;});
                   difficultyChart.update();
                 }
               }
@@ -576,7 +521,7 @@ html(lang='en')
           return '<div class="card-header"><strong>#{settings.locale.difficulty}</strong></div><div class="card-body"><div id="difficultyPanelLoading" class="header-panel"><i class="fa fa-spinner fa-pulse"></i></div><div id="difficultypanel" class="header-panel" style="display:none;"><span class="fas fa-sliders-h"></span>'+difficultyType+'</div></div>';
         }
         function getMasternodesPanel() {
-          return '<div class="card-header"><strong>#{settings.locale.masternodecount}</strong></div><div class="card-body"><div id="masternodePanelLoading" class="header-panel"><i class="fa fa-spinner fa-pulse"></i></div><div id="masternodepanel" class="header-panel" style="display:none;"><span id="spnMasternodeCountOnline" class="fa fa-check-circle" data-bs-toggle="tooltip" data-bs-placement="top"></span><label id="masternodeCountOnline" data-bs-toggle="tooltip" data-bs-placement="top"></label><label>&nbsp;/&nbsp;</label><label id="masternodeCountOffline" data-bs-toggle="tooltip" data-bs-placement="top"></label><span id="spnMasternodeCountOffline" class="fa fa-exclamation-triangle" data-bs-toggle="tooltip" data-bs-placement="top"></span></div></div>';
+          return '<div class="card-header"><strong>Smartnodes</strong></div><div class="card-body"><div id="masternodePanelLoading" class="header-panel"><i class="fa fa-spinner fa-pulse"></i></div><div id="masternodepanel" class="header-panel" style="display:none;"><span id="spnMasternodeCountOnline" class="fa fa-check-circle" data-bs-toggle="tooltip" data-bs-placement="top"></span><label id="masternodeCountOnline" data-bs-toggle="tooltip" data-bs-placement="top"></label><label>&nbsp;/&nbsp;</label><label id="masternodeCountOffline" data-bs-toggle="tooltip" data-bs-placement="top"></label><span id="spnMasternodeCountOffline" class="fa fa-exclamation-triangle" data-bs-toggle="tooltip" data-bs-placement="top"></span></div></div>';
         }
         function getCoinSupplyPanel() {
           var supplyType='<label id="supply"></label>';
@@ -710,7 +655,7 @@ html(lang='en')
                 li#masternodes.nav-item
                   a.nav-link(href='/masternodes')
                     span.fa.fa-share-alt
-                    span.margin-left-5 Masternodes
+                    span.margin-left-5 Smartnodes
               if settings.movement_page.enabled == true
                 li#movement.nav-item
                   a.nav-link(href='/movement')
@@ -736,21 +681,13 @@ html(lang='en')
                       each mkt in settings.market_data
                         if mkt != null && mkt.id != null
                           each pair in mkt.trading_pairs
-                            a.dropdown-item(href='/markets/' + mkt.id + '/' + pair.pair)
-                              if pair.isAlt == true
-                                if mkt.alt_logo != null && mkt.alt_logo != ''
-                                  img.market-logo(src='data:image/png;base64,' + mkt.alt_logo, title=mkt.alt_name + ' (' + pair.pair + ')', alt=mkt.alt_name + ' (' + pair.pair + ')')
-                                else
-                                  i.market-logo.fas.fa-question-circle
-                                span #{mkt.alt_name}
-                                  span.small.fw-normal  (#{pair.pair})
+                            a.dropdown-item(href='/markets/' + mkt.id + '/' + pair)
+                              if mkt.logo != null && mkt.logo != ''
+                                img.market-logo(src='data:image/png;base64,' + mkt.logo, title=mkt.name + ' (' + pair + ')', alt=mkt.name + ' (' + pair + ')')
                               else
-                                if mkt.logo != null && mkt.logo != ''
-                                  img.market-logo(src='data:image/png;base64,' + mkt.logo, title=mkt.name + ' (' + pair.pair + ')', alt=mkt.name + ' (' + pair.pair + ')')
-                                else
-                                  i.market-logo.fas.fa-question-circle
-                                span #{mkt.name}
-                                  span.small.fw-normal  (#{pair.pair})
+                                i.market-logo.fas.fa-question-circle
+                              span #{mkt.name}
+                                span.small.fw-normal  (#{pair})
                 else
                   li#markets.nav-item
                     a.nav-link(href='/markets/' + settings.markets_page.default_exchange.exchange_name + '/' + settings.markets_page.default_exchange.trading_pair)
