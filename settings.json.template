@@ -490,7 +490,7 @@
     // genesis_block: Your coins genesis block hash is used to determine the beginning of the blockchain
     //                For many bitcoin clones you can use the following cmd to get the block hash of the genesis block: coin-cli getblockhash 0
     //                NOTE: If this value is not entered correctly it will not be possible for the explorer to find or navigate to the genesis block, neither via block or transaction hash
-    "genesis_block": "eff0bbe5c1bbe1ef8da54822a18f528d6dc58232990bdb86e0a77ab2814ed12c"
+    "genesis_block": "e78a0b431e958a4f52af66d780dbf46c569dac677c6984400e7bd3c6b049e5b1"
   },
 
   // transaction_page: a collection of settings that pertain to the transaction/tx page
@@ -513,10 +513,10 @@
     // genesis_tx: Your coins genesis transaction hash is used to determine the beginning of the blockchain
     //             For many bitcoin clones you can use the following cmd to find the list of transaction hashes from the genesis block: coin-cli getblock 00014f36c648cdbc750f7dd28487a23cd9e0b0f95f5fccc5b5d01367e3f57469
     //             NOTE: If this value is not entered correctly it will not be possible for the explorer to find or navigate to the genesis block by searching for the genesis transaction hash
-    "genesis_tx": "bfe15871764bf35d6391308fc2dab8846f177ba563d256b1764271987ec99bc0",
+    "genesis_tx": "5110a1e5a27a7a58944e5581e0699bd4731fdedc1e705757ecea5b5d8b5631a4",
     // show_op_return: Determine whether to decode and show OP_RETURN values that may have been embeddeded in a transaction
     //                 NOTE: Enabling this option will require a full reindex of the blockchain data before previously synced transactions can display the OP_RETURN value
-    "show_op_return": false
+    "show_op_return": true
   },
 
   // address_page: a collection of settings that pertain to the address page
@@ -922,18 +922,18 @@
     "sample_data": {
       // blockindex: This value can be any valid block height number from your coins blockchain
       //             NOTE: This value is only used to build example api links on the api page from the /api/getblockhash api for example
-      "blockindex": 42069,
+      "blockindex": 1,
       // blockhash: This value can be any valid block hash from your coins blockchain
       //            For many bitcoin clones you can use the following cmd to get the block hash for a given block height: coin-cli getblockhash 64152
       //            NOTE: This value is only used to build example api links on the api page from the /api/getblock api for example
-      "blockhash": "729ee24deac4d1df060191debdf52079a70987dc2001e058002641a1412d3782",
+      "blockhash": "3691d55134f63261c3143ab7f76dd51a513b31e75c519c98d87548628a348524",
       // txhash: This value can be any valid transaction hash from your coins blockchain
       //         For many bitcoin clones you can use the following cmd to find a list of tx hashes for a given block hash: coin-cli getblock 000000001ba119a0f6d49ebabd83343b125d7ee3d3184b1b41d6a7f2051153eb
       //         NOTE: This value is only used to build example api links on the api page from the /api/getrawtransaction api for example
-      "txhash": "4926858dd25098ae2a9fd98604357fa764d8f00c834edfcd88995f4dd51bef09",
+      "txhash": "39e9d7b91cb62ed2f3c0b24847a60243ccc086b5493b7a31c699a5438ecc6b74",
       // address: This value can be any valid wallet address from your coins blockchain that has received at least 1 or more coin transactions
       //          NOTE: This value is only used to build example api links on the api page from the /ext/getaddress api for example
-      "address": "yaDfcdCupB1T5YoVRjYr8fXCvB8U5AuNX8"
+      "address": "JUPw1BW3jJD9CYx4xSPNDsfhGeHsiU4oRu"
     },
     // public_apis: a collection of settings that pertain to the public api command system
     //              NOTE: Disabling any of these apis will remove the api definition from the api page and will return a "This method is disabled" msg if the api endpoint is called.
